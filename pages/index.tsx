@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import HomeLayout from "../components/HomeLayout";
 import LatestPost from "../components/LatestPost";
@@ -16,7 +16,32 @@ import Footer from "../components/Footer";
 
 const tags = ["Idea", "Interior", "Lifestyle", "Design", "Health", "Eco", "Review"];
 
-const Home: NextPage = ({ myposts }: any) => {
+const APP_URL = "http://localhost:1337";
+
+
+export async function getStaticProps() {
+  const url = `${APP_URL}/api/posts?populate=*`;
+  const url2 = `${APP_URL}/api/tags?populate=*`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const res2 = await fetch(url2);
+  const data2 = await res2.json();
+  return {
+    props: {
+      myposts: data.data,
+      mytags: data2.data,
+    }
+  }
+}
+
+
+const Home: NextPage = ({ myposts, mytags }: any) => {
+  //console.log("My Posts:", myposts); // myposts.data will be an array;
+  const tagsData = mytags.map((tag: any) => {
+    return { name: tag.attributes.Name, imgUrl: tag.attributes.Image.data.attributes.formats.large.url }
+  })
+  //array[array.length-1] will be latest post.
+
   return (
     <div>
       <Head>
@@ -38,12 +63,12 @@ const Home: NextPage = ({ myposts }: any) => {
         {/* Tags Container */}
         <div className="w-full"><h3 className="uppercase my-2 font-thin text-sm lg:ml-0 ml-4">Popular Tags</h3></div>
         <div className="flex items-center w-full md:justify-between flex-wrap justify-evenly">
-          {tags.map((tag: string, index: number) => {
-            return <div key={index} className="relative cursor-pointer my-2 transition-all hover:-translate-y-1">
-              <Image src={`/assets/tags/tag (${index + 1}).jpeg`} alt="tag-img" width="100" height="100"
+          {tagsData.map((tag: any, index: number) => {
+            return <Link href={`/blog/tag/${tag.name}`} key={index} className="relative cursor-pointer my-2 transition-all hover:-translate-y-1">
+              <Image src={APP_URL + tag.imgUrl} alt="tag-img" width="100" height="100"
                 className="w-44 h-32 object-cover rounded-md" />
-              <p className="absolute bottom-0 bg-slate-100 p-1 px-3 font-semibold m-2 rounded-full text-sm text-gray-500">{tag}</p>
-            </div>
+              <p className="absolute bottom-0 bg-slate-100 p-1 px-3 font-semibold m-2 rounded-full text-sm text-gray-500">{tag.name}</p>
+            </Link>
           })}
         </div>
         <div className="my-6"></div>
@@ -51,12 +76,12 @@ const Home: NextPage = ({ myposts }: any) => {
         <div className="w-full"><h3 className="uppercase my-2 font-thin text-sm lg:ml-0 ml-4">What’s new</h3></div>
         <div className="flex w-full md:flex-row flex-col">
           <div className="md:w-3/4 w-full">
-            <LatestPost />
+            <LatestPost post={myposts[myposts.length - 1]} />
           </div>
           <div className="md:w-1/4 w-full flex flex-col items-center">
             <NewsLetter />
-            <SecondLatest />
-            <SecondLatest />
+            <SecondLatest post={myposts[myposts.length - 2]} />
+            <SecondLatest post={myposts[myposts.length - 2]} />
           </div>
         </div>
         <div className="w-full"><h3 className="uppercase my-2 mt-16 font-thin text-sm lg:ml-0 ml-4">Featured posts</h3></div>
@@ -64,11 +89,11 @@ const Home: NextPage = ({ myposts }: any) => {
         <div className="w-full"><h3 className="uppercase mt-14 font-thin text-sm lg:ml-0 ml-4">All posts</h3></div>
         {/* All posts container */}
         <div className="flex flex-wrap w-full">
-          <PostHighlight />
-          <PostHighlight />
-          <PostHighlight />
-          <PostHighlight />
-          <PostHighlight />
+          <PostHighlight post={myposts[0]} />
+          <PostHighlight post={myposts[0]} />
+          <PostHighlight post={myposts[0]} />
+          <PostHighlight post={myposts[0]} />
+          <PostHighlight post={myposts[0]} />
         </div>
         <div className="flex justify-center w-full my-6">
           <Link href="/" className="text-white bg-green-800 px-6 py-3 rounded-full transition-all duration-300 hover:px-8">See more</Link>

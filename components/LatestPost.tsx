@@ -1,22 +1,40 @@
 import Image from 'next/image'
 import React from 'react'
+import Link from 'next/link';
+import { removeQuestionMark } from '../lib/post';
+
+const APP_URL = "http://localhost:1337";
+
+
 
 function Tag({ children }: any) {
-    return <p className="bg-green-50 text-xs mx-2 px-3 py-1 rounded-full font-medium">{children}</p>
+    return <Link href={`/blog/tag/${children}`} className="bg-green-50 hover:bg-green-200 transition duration-300 text-xs mx-2 px-3 py-1 rounded-full font-medium">{children}</Link>
 }
 
 
 function LatestPost({ post }: any) {
+    if (!post.attributes) {
+        return <p>Loading...</p>
+    }
+    const { Date, Description, Title } = post.attributes;
+    const tags = post.attributes.tags.data;
+    const imgUrl = APP_URL + post.attributes.Image.data.attributes.formats.large.url;
+
     return (
         <section className="mb-4 md:mb-0 flex flex-col items-center lg:items-start">
-            <Image src="/assets/images/blog1.jpeg" alt="blog" width={800} height={400}
-                className="w-11/12 rounded-md hover:-translate-y-1 transition duration-300 cursor-pointer" />
+            <Link href={`/blog/post/${removeQuestionMark(Title.toLowerCase().split(" ").join("-"))}`}
+                className='flex flex-col lg:items-start items-center'>
+                <Image src={imgUrl} alt="blog" width={1200} height={400}
+                    className="w-11/12 rounded-md hover:-translate-y-1 transition duration-300 cursor-pointer" />
+            </Link>
             <div className="flex mt-4">
-                <Tag>Lifestyle</Tag>
-                <Tag>Eco</Tag>
+                {tags.map((tag: { attributes: { Name: string } }, index: number) => {
+                    return <Tag key={index}>{tag.attributes.Name}</Tag>
+                })}
             </div>
-            <h1
-                className="title font-semibold md:text-6xl text-2xl transition-all md:w-10/12 w-11/12 mt-6 hover:text-gray-600 text-black cursor-pointer leading-snug">The trick to getting more done is to have the freedom to roam around</h1>
+            <Link href={`/blog/post/${removeQuestionMark(Title.toLowerCase().split(" ").join("-"))}`}
+                className="title font-semibold md:text-6xl text-2xl transition-all md:w-10/12 w-11/12 mt-6 hover:text-gray-600 text-black cursor-pointer leading-snug">
+                {Title}</Link>
             <p className="text-medium md:text-2xl text-lg mt-5 md:w-3/4 w-11/12 text-gray-500 leading-relaxed">
                 Vel lectus vel velit pellentesque dignissim nec id magna. Cras molestie ornare quam at semper.
                 Proin a ipsum ex. Curabitur eu venenatis justo. Nullam felis augue, imperdiet at sodales.

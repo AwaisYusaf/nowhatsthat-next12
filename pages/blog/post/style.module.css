@@ -1,0 +1,46 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    font-family:'Roboto', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    align-items: center;
+}
+.container ul{
+    list-style:inside;
+    margin: 10px 0;
+}
+.container ol{
+    list-style:inside decimal;
+    margin: 10px 0;
+}
+.container h1{
+    font-size: 30px;
+    font-weight: bold;
+    margin: 15px 0;
+    color:gray;
+}
+.container h2{
+    font-size: 25px;
+    font-weight: 600;
+    margin: 5px 0;
+    
+}
+.container h3{
+    font-size: 22px;
+    font-weight: 600;
+    margin: 8px 0;
+    
+}
+.container p{
+    margin:15px 0;
+}
+.container p, .container li{
+    font-size: 22px;
+}
+.container a{
+    text-decoration: underline;
+    color:green;
+}
+.container em{
+    color:gray;
+}
