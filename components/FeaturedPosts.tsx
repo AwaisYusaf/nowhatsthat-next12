@@ -5,7 +5,7 @@ function Tag({ children }: any) {
     return <p className="bg-green-50 text-xs mr-4 px-3 py-1 my-2 rounded-full font-medium hover:bg-green-200 cursor-pointer transition duration-300">{children}</p>
 }
 function Post() {
-    return <section className="mt-8 md:w-1/4 w-11/12 p-5 bg-green-800 m-6 rounded-xl flex flex-col items-center cursor-pointer hover:-translate-y-1 transition duration-300">
+    return <section className="mt-8 lg:w-1/4 md:w-8/12 sm:w-11/12 p-5 bg-green-800 m-6 rounded-xl flex flex-col items-center cursor-pointer hover:-translate-y-1 transition duration-300">
         <Image src="/assets/images/blog2.jpeg" alt="blog" width="300" height="200"
             className="rounded-xl" />
         <div className="flex mt-4 w-full ml-4">

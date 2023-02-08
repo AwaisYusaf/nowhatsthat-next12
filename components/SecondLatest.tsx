@@ -5,7 +5,7 @@ function Tag({ children }: any) {
 }
 function SecondLatest() {
     return (
-        <section className="mt-8">
+        <section className="mt-8 hidden lg:block">
             <Image src="/assets/images/blog2.jpeg" alt="blog" width="400" height="200"
                 className="rounded-xl hover:-translate-y-1 transition duration-300 cursor-pointer" />
             <div className="flex mt-4">
