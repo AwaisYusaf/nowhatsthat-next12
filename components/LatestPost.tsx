@@ -8,7 +8,7 @@ function Tag({ children }: any) {
 
 function LatestPost({ post }: any) {
     return (
-        <section className="mb-4 md:mb-0 flex flex-col items-center">
+        <section className="mb-4 md:mb-0 flex flex-col items-center lg:items-start">
             <Image src="/assets/images/blog1.jpeg" alt="blog" width={800} height={400}
                 className="w-11/12 rounded-md hover:-translate-y-1 transition duration-300 cursor-pointer" />
             <div className="flex mt-4">
