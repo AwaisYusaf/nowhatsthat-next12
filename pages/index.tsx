@@ -22,25 +22,44 @@ const APP_URL = "http://localhost:1337";
 export async function getStaticProps() {
   const url = `${APP_URL}/api/posts?populate=*`;
   const url2 = `${APP_URL}/api/tags?populate=*`;
+  const url3 = `${APP_URL}/api/featured-posts?populate=*`;
+
   const res = await fetch(url);
   const data = await res.json();
+
   const res2 = await fetch(url2);
   const data2 = await res2.json();
+
+  const res3 = await fetch(url3);
+  const data3 = await res3.json();
+
+
+
   return {
     props: {
       myposts: data.data,
       mytags: data2.data,
+      featuredPostsData: data3.data
     }
   }
 }
 
 
-const Home: NextPage = ({ myposts, mytags }: any) => {
+const Home: NextPage = ({ myposts, mytags, featuredPostsData }: any) => {
+
   //console.log("My Posts:", myposts); // myposts.data will be an array;
+
   const tagsData = mytags.map((tag: any) => {
     return { name: tag.attributes.Name, imgUrl: tag.attributes.Image.data.attributes.formats.large.url }
   })
+
   //array[array.length-1] will be latest post.
+
+  let postsData: any = [];
+  for (let i = myposts.length - 1; i >= 0; i--) {
+    postsData.push(myposts[i]);
+  }
+
 
   return (
     <div>
@@ -81,22 +100,22 @@ const Home: NextPage = ({ myposts, mytags }: any) => {
           <div className="md:w-1/4 w-full flex flex-col items-center">
             <NewsLetter />
             <SecondLatest post={myposts[myposts.length - 2]} />
-            <SecondLatest post={myposts[myposts.length - 2]} />
+            <SecondLatest post={myposts[myposts.length - 3]} />
           </div>
         </div>
         <div className="w-full"><h3 className="uppercase my-2 mt-16 font-thin text-sm lg:ml-0 ml-4">Featured posts</h3></div>
-        <FeaturedPosts />
+        <FeaturedPosts posts={featuredPostsData} />
         <div className="w-full"><h3 className="uppercase mt-14 font-thin text-sm lg:ml-0 ml-4">All posts</h3></div>
         {/* All posts container */}
-        <div className="flex flex-wrap w-full">
-          <PostHighlight post={myposts[0]} />
-          <PostHighlight post={myposts[0]} />
-          <PostHighlight post={myposts[0]} />
-          <PostHighlight post={myposts[0]} />
-          <PostHighlight post={myposts[0]} />
+        <div className="flex flex-wrap w-full md:flex-row flex-col items-center">
+          {
+            postsData.map((post: any, index: number) => {
+              return <PostHighlight post={post} key={index} />
+            })
+          }
         </div>
         <div className="flex justify-center w-full my-6">
-          <Link href="/" className="text-white bg-green-800 px-6 py-3 rounded-full transition-all duration-300 hover:px-8">See more</Link>
+          <Link href="/blog" className="text-white bg-green-800 px-6 py-3 rounded-full transition-all duration-300 hover:px-8">See more</Link>
         </div>
         <Footer />
       </HomeLayout>

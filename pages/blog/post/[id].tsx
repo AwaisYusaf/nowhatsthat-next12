@@ -76,7 +76,7 @@ function Post({ post }: any) {
             </Head>
 
             <HomeLayout>
-                <main className={styles.container}>
+                <main className={styles.container} >
                     <span className='text-end text-gray-600 font-semibold lg:w-8/12 w-11/12'>
                         <time dateTime={Date}>{format(parseISO(Date), 'LLLL d, yyyy')}</time>
                     </span>

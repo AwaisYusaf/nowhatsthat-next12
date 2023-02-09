@@ -13,7 +13,7 @@ function Tag({ children }: any) {
     </Link>
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     const url = `${APP_URL}/api/posts?populate=*`;
     const res = await fetch(url);
     const { data } = await res.json();
@@ -34,6 +34,11 @@ export async function getStaticProps() {
 
 
 function Blogs({ posts, tags }: any) {
+    let postsData = [posts[posts.length - 1]];
+    for (let i = posts.length - 2; i >= 0; i--) {
+        postsData.push(posts[i]);
+    }
+
     return (
         <main>
             <Head>
@@ -50,15 +55,14 @@ function Blogs({ posts, tags }: any) {
                     }
                 </div>
                 <div className="w-full"><h3
-                    className="uppercase font-bold text-md ml-5 border-b-2 border-green-300 w-fit mt-5">Lifestyle</h3></div>
+                    className="uppercase font-bold text-md ml-5 border-b-2 border-green-300 w-fit mt-5">All</h3></div>
                 <div className="flex flex-wrap w-full">
                     {
-                        posts.map((post: any, index: number) => {
+                        postsData.map((post: any, index: number) => {
                             return <PostHighlight key={index} post={post} />
                         })
                     }
                 </div>
-
             </HomeLayout>
         </main>
     )
