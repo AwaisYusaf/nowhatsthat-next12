@@ -2,8 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
+
+@layer components{
+  .contactInput{
+    @apply bg-green-50 text-lg p-3 outline-none rounded border-b-2 border-green-200 hover:border-green-600 focus:border-green-600 transition-all placeholder-opacity-50 placeholder-green-700
+  }
+
+
+}
+
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+
+body{
   padding: 0;
   margin: 0;
   font-family:'Roboto', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -27,7 +44,7 @@ a {
   overflow: hidden;
    text-overflow: ellipsis;
    display: -webkit-box;
-   -webkit-line-clamp: 2; /* number of lines to show */
-           line-clamp: 2;
+   -webkit-line-clamp: 2; 
+    line-clamp: 2;
    -webkit-box-orient: vertical;
 }

@@ -7,7 +7,7 @@ function NewsLetter() {
             <h2 className="text-3xl font-bold">Get all the latest posts delivered straight to your inbox.</h2>
             <input placeholder="Your email address"
                 className="px-5 py-3 rounded-full w-11/12 outline-none border-none mt-5 text-black" />
-            <button className="px-4 py-2 rounded-full w-10/12 outline-none border-none bg-white text-black mt-5">Subscribe</button>
+            <button className="px-4 py-2 rounded-full w-10/12 outline-none border-none bg-white transition-all duration-200 text-black mt-5 hover:bg-green-900 hover:ring-[2px] hover:ring-white hover:text-white">Subscribe</button>
         </div>
     )
 }

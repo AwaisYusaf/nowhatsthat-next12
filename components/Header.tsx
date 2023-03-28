@@ -15,16 +15,16 @@ function Header() {
                 <Link href="/blog" className="mx-6 hover:text-black">
                     Blog
                 </Link>
-                <Link href="/blog" className="mx-6 hover:text-black">
+                <Link href="/privacy-policy" className="mx-6 hover:text-black">
                     Privacy Policy
                 </Link>
-                <Link href="/blog" className="mx-6 hover:text-black">
+                <Link href="/terms" className="mx-6 hover:text-black">
                     Terms & Conditions
                 </Link>
-                <Link href="/blog" className="mx-6 hover:text-black">
+                <Link href="/contact" className="mx-6 hover:text-black">
                     Contact
                 </Link>
-                <Link href="/blog" className="mx-6 hover:text-black">
+                <Link href="/about" className="mx-6 hover:text-black">
                     About Us
                 </Link>
             </div>

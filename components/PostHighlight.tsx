@@ -23,8 +23,8 @@ function PostHighlight({ post, type }: any) {
     return (
         <section className="mt-8 flex flex-col md:w-4/12 w-11/12 p-5 my-3">
             <Link href={`${initialUrl}/${removeQuestionMark(Title.toLowerCase().split(" ").join("-"))}`}>
-                <Image src={imgUrl} alt="blog" width="1800" height="200"
-                    className="rounded-xl transition duration-300 hover:-translate-y-1 cursor-pointer" />
+                <Image src={imgUrl} alt="blog" width="1600" height="900"
+                    className="rounded-xl transition duration-300 hover:-translate-y-1 cursor-pointer w-full h-[280px] object-cover" />
             </Link>
             <div className="flex mt-4">
                 {tags && tags.map((tag: { attributes: { Name: string } }, index: number) => {

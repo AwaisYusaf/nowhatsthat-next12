@@ -70,7 +70,7 @@ const Home: NextPage = ({ myposts, mytags, featuredPostsData }: any) => {
       </Head>
 
       <HomeLayout >
-        <h1 className="text-center md:text-6xl text-2xl md:w-4/6 w-full mt-20 font-dancing-script font-medium leading-relaxed">
+        <h1 className="text-center md:text-6xl text-2xl md:w-4/6 w-full mt-0 lg:mt-16 font-dancing-script font-medium leading-relaxed">
           <span className="font-bold">Hey, I’m Wajahat.</span> I promote positive culture through <span className="font-bold">inspiring articles</span> on health, design, and web.
         </h1>
         {/* Search */}
@@ -81,11 +81,11 @@ const Home: NextPage = ({ myposts, mytags, featuredPostsData }: any) => {
         </div>
         {/* Tags Container */}
         <div className="w-full"><h3 className="uppercase my-2 font-thin text-sm lg:ml-0 ml-4">Popular Tags</h3></div>
-        <div className="flex items-center w-full md:justify-between flex-wrap justify-evenly">
+        <div className="flex lg:items-center w-full md:justify-between flex-wrap justify-evenly">
           {tagsData.map((tag: any, index: number) => {
             return <Link href={`/blog/tag/${tag.name}`} key={index} className="relative cursor-pointer my-2 transition-all hover:-translate-y-1">
               <Image src={APP_URL + tag.imgUrl} alt="tag-img" width="100" height="100"
-                className="w-44 h-32 object-cover rounded-md" />
+                className="w-32 lg:w-36 xl:w-44 h-fit object-cover rounded-md" />
               <p className="absolute bottom-0 bg-slate-100 p-1 px-3 font-semibold m-2 rounded-full text-sm text-gray-500">{tag.name}</p>
             </Link>
           })}
@@ -107,7 +107,7 @@ const Home: NextPage = ({ myposts, mytags, featuredPostsData }: any) => {
         <FeaturedPosts posts={featuredPostsData} />
         <div className="w-full"><h3 className="uppercase mt-14 font-thin text-sm lg:ml-0 ml-4">All posts</h3></div>
         {/* All posts container */}
-        <div className="flex flex-wrap w-full md:flex-row flex-col items-center">
+        <div className="flex flex-wrap w-full md:flex-row flex-col items-start">
           {
             postsData.map((post: any, index: number) => {
               return <PostHighlight post={post} key={index} />
