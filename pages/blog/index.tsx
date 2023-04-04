@@ -4,6 +4,8 @@ import HomeLayout from '../../components/HomeLayout';
 import PostHighlight from '../../components/PostHighlight';
 import Link from "next/link";
 const APP_URL = 'http://localhost:1337';
+
+
 function Tag({ children }: any) {
     return <Link
         className={`${children == "All" ? "bg-black text-white" : "bg-green-100 hover:bg-green-200"}  text-lg mx-2 px-4 py-1 rounded-full font-medium cursor-pointer`}
@@ -59,7 +61,7 @@ function Blogs({ posts, tags }: any) {
                 <div className="flex flex-wrap w-full">
                     {
                         postsData.map((post: any, index: number) => {
-                            return <PostHighlight key={index} post={post} />
+                            return <PostHighlight key={index} post={post} type="" />
                         })
                     }
                 </div>
