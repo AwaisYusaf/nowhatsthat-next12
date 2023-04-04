@@ -2,8 +2,6 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import Header from "../components/Header";
 import HomeLayout from "../components/HomeLayout";
 import LatestPost from "../components/LatestPost";
 import NewsLetter from "../components/NewsLetter";
@@ -13,71 +11,109 @@ import PostHighlight from "../components/PostHighlight";
 import Footer from "../components/Footer";
 import { createClient } from "contentful";
 
-
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
 });
-
 
 const fetchTags = async () => {
   // Contentful
   const res = await client.getEntries({
-    content_type: "tag"
+    content_type: "tag",
   });
   return res.items.map((item: any) => {
-    const { title, thumbnail: { fields: { file: { url } } } } = item.fields;
-    return { title, thumbnailUrl: "https:" + url }
-  })
-}
+    const {
+      title,
+      thumbnail: {
+        fields: {
+          file: { url },
+        },
+      },
+    } = item.fields;
+    return { title, thumbnailUrl: "https:" + url };
+  });
+};
 
 const fetchBlog = async () => {
   // Contentful
   const res = await client.getEntries({
-    content_type: "blog"
+    content_type: "blog",
   });
   return res.items.map((item: any) => {
-    const { title, thumbnail: { fields: { file: { url } } }, description, slug, date, tags } = item.fields;
+    const {
+      title,
+      thumbnail: {
+        fields: {
+          file: { url },
+        },
+      },
+      description,
+      slug,
+      date,
+      tags,
+    } = item.fields;
     const { id } = item.sys;
     const blogTags = tags.map((tag: any) => {
-      const { title, thumbnail: { fields: { file: { url } } } } = tag.fields;
-      return { title, thumbnailUrl: "https:" + url }
-    })
-    return { id, title, thumbnailUrl: "https:" + url, slug, date, description, tags: blogTags }
-  })
-}
+      const {
+        title,
+        thumbnail: {
+          fields: {
+            file: { url },
+          },
+        },
+      } = tag.fields;
+      return { title, thumbnailUrl: "https:" + url };
+    });
+    return {
+      id,
+      title,
+      thumbnailUrl: "https:" + url,
+      slug,
+      date,
+      description,
+      tags: blogTags,
+    };
+  });
+};
 const fetchFeaturedBlog = async () => {
   // Contentful
   const res = await client.getEntries({
-    content_type: "featuredBlog"
+    content_type: "featuredBlog",
   });
   return res.items.map((item: any) => {
-    const { title, thumbnail: { fields: { file: { url } } }, description, slug, date } = item.fields;
+    const {
+      title,
+      thumbnail: {
+        fields: {
+          file: { url },
+        },
+      },
+      description,
+      slug,
+      date,
+    } = item.fields;
     const { id } = item.sys;
-    return { id, title, thumbnailUrl: "https:" + url, slug, date, description }
-  })
-}
-
-
+    return { id, title, thumbnailUrl: "https:" + url, slug, date, description };
+  });
+};
 
 export async function getStaticProps() {
-  const [tags, blog, featured] = await Promise.all([fetchTags(), fetchBlog(), fetchFeaturedBlog()]);
+  const [tags, blog, featured] = await Promise.all([
+    fetchTags(),
+    fetchBlog(),
+    fetchFeaturedBlog(),
+  ]);
 
   return {
     props: {
       blog,
       featured,
-      tags
-    }
-  }
+      tags,
+    },
+  };
 }
 
-
 const Home: NextPage = ({ tags, blog, featured }: any) => {
-
-
-
-
   return (
     <div>
       <Head>
@@ -86,18 +122,33 @@ const Home: NextPage = ({ tags, blog, featured }: any) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <HomeLayout >
+      <HomeLayout>
         <h1 className="text-center md:text-6xl text-2xl md:w-4/6 w-full mt-0 lg:mt-16 font-dancing-script font-medium leading-relaxed">
-          <span className="font-bold">Hey, I’m Wajahat.</span> I promote positive culture through <span className="font-bold">inspiring articles</span> on health, design, and web.
+          <span className="font-bold">Hey, I’m Wajahat.</span> I promote
+          positive culture through{" "}
+          <span className="font-bold">inspiring articles</span> on health,
+          design, and web.
         </h1>
         {/* Search */}
         <div className="flex items-center rounded-full px-6 py-5 bg-green-100 md:w-4/12 w-10/12 justify-between my-10">
-          <input type="text" placeholder="Search posts , tags and authors"
-            className="outline-none bg-green-100 border-none w-3/4 md:text-md text-sm tracking-wider" />
-          <Image src="/assets/images/search.png" alt="search" width="20" height="30" />
+          <input
+            type="text"
+            placeholder="Search posts , tags and authors"
+            className="outline-none bg-green-100 border-none w-3/4 md:text-md text-sm tracking-wider"
+          />
+          <Image
+            src="/assets/images/search.png"
+            alt="search"
+            width="20"
+            height="30"
+          />
         </div>
         {/* Tags Container */}
-        <div className="w-full"><h3 className="uppercase my-2 font-thin text-sm lg:ml-0 ml-4">Popular Tags</h3></div>
+        <div className="w-full">
+          <h3 className="uppercase my-2 font-thin text-sm lg:ml-0 ml-4">
+            Popular Tags
+          </h3>
+        </div>
         <div className="flex lg:items-center w-full md:justify-between flex-wrap justify-evenly">
           {/* {tagsData.map((tag: any, index: number) => {
             return <Link href={`/blog/tag/${tag.name}`} key={index} className="relative cursor-pointer my-2 transition-all hover:-translate-y-1">
@@ -106,19 +157,36 @@ const Home: NextPage = ({ tags, blog, featured }: any) => {
               <p className="absolute bottom-0 bg-slate-100 p-1 px-3 font-semibold m-2 rounded-full text-sm text-gray-500">{tag.name}</p>
             </Link>
           })} */}
-          {
-            tags.map((tag: { title: string, thumbnailUrl: string }, index: number) => {
-              return <Link href={`/blog/tag/${tag.title}`} key={index} className="relative cursor-pointer my-2 transition-all hover:-translate-y-1">
-                <Image src={tag.thumbnailUrl} alt="tag-img" width="100" height="100"
-                  className="w-32 lg:w-36 xl:w-44 h-fit object-cover rounded-md" />
-                <p className="absolute bottom-0 bg-slate-100 p-1 px-3 font-semibold m-2 rounded-full text-sm text-gray-500">{tag.title}</p>
-              </Link>
-            })
-          }
+          {tags.map(
+            (tag: { title: string; thumbnailUrl: string }, index: number) => {
+              return (
+                <Link
+                  href={`/blog/tag/${tag.title}`}
+                  key={index}
+                  className="relative cursor-pointer my-2 transition-all hover:-translate-y-1"
+                >
+                  <Image
+                    src={tag.thumbnailUrl}
+                    alt="tag-img"
+                    width="100"
+                    height="100"
+                    className="w-32 lg:w-36 xl:w-44 h-fit object-cover rounded-md"
+                  />
+                  <p className="absolute bottom-0 bg-slate-100 p-1 px-3 font-semibold m-2 rounded-full text-sm text-gray-500">
+                    {tag.title}
+                  </p>
+                </Link>
+              );
+            }
+          )}
         </div>
         <div className="my-6"></div>
         {/* Whats New Container */}
-        <div className="w-full"><h3 className="uppercase my-2 font-thin text-sm lg:ml-0 ml-4">What’s new</h3></div>
+        <div className="w-full">
+          <h3 className="uppercase my-2 font-thin text-sm lg:ml-0 ml-4">
+            What’s new
+          </h3>
+        </div>
         <div className="flex w-full md:flex-row flex-col">
           <div className="md:w-3/4 w-full">
             <LatestPost post={blog[0]} />
@@ -129,19 +197,30 @@ const Home: NextPage = ({ tags, blog, featured }: any) => {
             <SecondLatest post={blog[2]} />
           </div>
         </div>
-        <div className="w-full"><h3 className="uppercase my-2 mt-16 font-thin text-sm lg:ml-0 ml-4">Featured posts</h3></div>
+        <div className="w-full">
+          <h3 className="uppercase my-2 mt-16 font-thin text-sm lg:ml-0 ml-4">
+            Featured posts
+          </h3>
+        </div>
         <FeaturedPosts posts={featured} />
-        <div className="w-full"><h3 className="uppercase mt-14 font-thin text-sm lg:ml-0 ml-4">All posts</h3></div>
+        <div className="w-full">
+          <h3 className="uppercase mt-14 font-thin text-sm lg:ml-0 ml-4">
+            All posts
+          </h3>
+        </div>
         {/* All posts container */}
         <div className="flex flex-wrap w-full md:flex-row flex-col items-start">
-          {
-            blog.map((post: any, index: number) => {
-              return <PostHighlight post={post} key={index} type="" />
-            })
-          }
+          {blog.map((post: any, index: number) => {
+            return <PostHighlight post={post} key={index} type="" />;
+          })}
         </div>
         <div className="flex justify-center w-full my-6">
-          <Link href="/blog" className="text-white bg-green-800 px-6 py-3 rounded-full transition-all duration-300 hover:px-8">See more</Link>
+          <Link
+            href="/blog"
+            className="text-white bg-green-800 px-6 py-3 rounded-full transition-all duration-300 hover:px-8"
+          >
+            See more
+          </Link>
         </div>
         <Footer />
       </HomeLayout>
