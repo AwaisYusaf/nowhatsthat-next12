@@ -3,6 +3,8 @@ import Head from "next/head";
 import HomeLayout from '../../components/HomeLayout';
 import PostHighlight from '../../components/PostHighlight';
 import Link from "next/link";
+import { createClient } from 'contentful';
+
 const APP_URL = 'http://localhost:1337';
 
 
@@ -15,6 +17,41 @@ function Tag({ children }: any) {
     </Link>
 }
 
+const client = createClient({
+    space: process.env.CONTENTFUL_SPACE_ID!,
+    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!
+});
+
+
+
+const fetchTags = async () => {
+    // Contentful
+    const res = await client.getEntries({
+        content_type: "tag"
+    });
+    return res.items.map((item: any) => {
+        const { title, thumbnail: { fields: { file: { url } } } } = item.fields;
+        return { title, thumbnailUrl: "https:" + url }
+    })
+}
+
+const fetchBlog = async () => {
+    // Contentful
+    const res = await client.getEntries({
+        content_type: "blog"
+    });
+    return res.items.map((item: any) => {
+        const { title, thumbnail: { fields: { file: { url } } }, description, slug, date, tags } = item.fields;
+        const { id } = item.sys;
+        const blogTags = tags.map((tag: any) => {
+            const { title, thumbnail: { fields: { file: { url } } } } = tag.fields;
+            return { title, thumbnailUrl: "https:" + url }
+        })
+        return { id, title, thumbnailUrl: "https:" + url, slug, date, description, tags: blogTags }
+    })
+}
+
+
 export async function getServerSideProps() {
     const url = `${APP_URL}/api/posts?populate=*`;
     const res = await fetch(url);
@@ -24,10 +61,14 @@ export async function getServerSideProps() {
     const res2 = await fetch(url2);
     const data2 = await res2.json();
 
+    const [blog, ctags] = await Promise.all([fetchBlog(), fetchTags()]);
+
     return {
         props: {
             posts: data,
-            tags: data2.data
+            tags: data2.data,
+            blog,
+            ctags
         }
     }
 }
@@ -35,11 +76,14 @@ export async function getServerSideProps() {
 
 
 
-function Blogs({ posts, tags }: any) {
+function Blogs({ posts, tags, blog, ctags }: any) {
     let postsData = [posts[posts.length - 1]];
     for (let i = posts.length - 2; i >= 0; i--) {
         postsData.push(posts[i]);
     }
+    console.log(blog);
+    console.log(ctags);
+
 
     return (
         <main>
@@ -51,8 +95,8 @@ function Blogs({ posts, tags }: any) {
                 <div className="flex mt-4 w-full">
                     <Tag>All</Tag>
                     {
-                        tags.map((tag: any, index: number) => {
-                            return <Tag key={index}>{tag.attributes.Name}</Tag>
+                        ctags.map((tag: any, index: number) => {
+                            return <Tag key={index}>{tag.title}</Tag>
                         })
                     }
                 </div>
@@ -60,7 +104,7 @@ function Blogs({ posts, tags }: any) {
                     className="uppercase font-bold text-md ml-5 border-b-2 border-green-300 w-fit mt-5">All</h3></div>
                 <div className="flex flex-wrap w-full">
                     {
-                        postsData.map((post: any, index: number) => {
+                        blog.map((post: any, index: number) => {
                             return <PostHighlight key={index} post={post} type="" />
                         })
                     }

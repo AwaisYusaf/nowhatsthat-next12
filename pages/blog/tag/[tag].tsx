@@ -4,6 +4,10 @@ import HomeLayout from '../../../components/HomeLayout';
 import PostHighlight from '../../../components/PostHighlight';
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+import { createClient } from "contentful";
+
+
 const APP_URL = 'http://localhost:1337';
 function Tag({ children }: any) {
     const path = useRouter().query;
@@ -14,19 +18,60 @@ function Tag({ children }: any) {
     </Link>
 }
 
+
+
+
+
+
+
+const client = createClient({
+    space: process.env.CONTENTFUL_SPACE_ID!,
+    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!
+});
+
+
+const fetchTags = async () => {
+    // Contentful
+    const res = await client.getEntries({
+        content_type: "tag"
+    });
+    return res.items.map((item: any) => {
+        const { title, thumbnail: { fields: { file: { url } } } } = item.fields;
+        return { title, thumbnailUrl: "https:" + url }
+    })
+}
+
+const fetchBlog = async () => {
+    // Contentful
+    const res = await client.getEntries({
+        content_type: "blog"
+    });
+    return res.items.map((item: any) => {
+        const { title, thumbnail: { fields: { file: { url } } }, description, slug, date, tags } = item.fields;
+        const { id } = item.sys;
+        const blogTags = tags.map((tag: any) => {
+            const { title, thumbnail: { fields: { file: { url } } } } = tag.fields;
+            return { title, thumbnailUrl: "https:" + url }
+        })
+        return { id, title, thumbnailUrl: "https:" + url, slug, date, description, tags: blogTags }
+    })
+}
+
 async function getAllPossibleTags() {
-    const url = `${APP_URL}/api/tags`;
-    const res = await fetch(url);
-    const { data } = await res.json();
-    const paths = data.map((tag: any) => {
+    const tags = await fetchTags();
+    const paths = tags.map((tag: any) => {
         return {
             params: {
-                tag: tag.attributes.Name
+                tag: tag.title
             }
         }
-    })
+    });
     return paths;
 }
+
+
+
+
 
 export async function getStaticPaths() {
     const paths = await getAllPossibleTags();
@@ -41,31 +86,39 @@ function contains(arr: any, item: any) {
     }
     return false;
 }
+
+
 function filterPosts(tag: string, posts: any) {
-    console.log("Filter posts called..");
+
     let targetPosts: any = [];
-    for (let i = 0; i < posts.data.length; i++) {
+    console.log("FiltedPosts Function...Tag:", tag, "...Data:", posts);
+
+    for (let i = 0; i < posts.length; i++) {
         // posts.data[i].attributes.tags will return object schema : {data: [ { id: 5, attributes: [Object] }, { id: 6, attributes: [Object] } ]}
-        const postTags = posts.data[i].attributes.tags.data;
-        for (let j = 0; j < postTags.length; j++) {
-            if (postTags[j].attributes.Name == tag) {
-                targetPosts.push(posts.data[i])
+
+        for (let j = 0; j < posts[i].tags.length; j++) {
+            if (posts[i].tags[j].title == tag) {
+
+                targetPosts.push(posts[i])
             }
+            console.log(posts[i].tags[j])
         }
     }
-    console.log("Tagrte postS:", targetPosts);
+
     return targetPosts;
 }
 export async function getStaticProps({ params }: { params: { tag: string } }) {
-    const url = `${APP_URL}/api/posts?populate=*`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const targetPosts = filterPosts(params.tag, data);
-    console.log("getStaticProps() inside post/[tag]: ", targetPosts);
+
+    const [blog, tags] = await Promise.all([fetchBlog(), fetchTags()]);
+
+
+    const targetPosts = filterPosts(params.tag, blog);
+
     const url2 = `${APP_URL}/api/tags?populate=*`;
     const res2 = await fetch(url2);
     const data2 = await res2.json();
-    return { props: { posts: targetPosts, tags: data2.data, tag: params.tag } };
+
+    return { props: { posts: targetPosts, tags, tag: params.tag } };
 }
 
 function Blogs({ posts, tags, tag }: any) {
@@ -88,7 +141,7 @@ function Blogs({ posts, tags, tag }: any) {
                     <Tag >All</Tag>
                     {
                         tags.map((tag: any, index: number) => {
-                            return <Tag key={index}>{tag.attributes.Name}</Tag>
+                            return <Tag key={index}>{tag.title}</Tag>
                         })
                     }
                 </div>
@@ -97,7 +150,7 @@ function Blogs({ posts, tags, tag }: any) {
                 <div className="flex flex-wrap w-full">
                     {postsData.length > 0 ? (
                         postsData.map((post: any, index: number) => {
-                            return <PostHighlight key={index} post={post} />
+                            return <PostHighlight key={index} post={post} type="" />
                         }))
                         : <p className='text-gray-600 font-semibold text-center w-full mt-20'>No {tag} post avaiable</p>}
                 </div>

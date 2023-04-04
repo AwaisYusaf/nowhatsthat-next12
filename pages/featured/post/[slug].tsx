@@ -17,38 +17,25 @@ const client = createClient({
     accessToken: "zgGSibJAwdQVT-0Gg3H7Efims0MHsjfFNdewiYyAXrM"
 });
 
-const fetchTags = async () => {
+
+const fetchFeaturedBlog = async () => {
     // Contentful
     const res = await client.getEntries({
-        content_type: "tag"
+        content_type: "featuredBlog"
     });
     return res.items.map((item: any) => {
-        const { title, thumbnail: { fields: { file: { url } } } } = item.fields;
-        return { title, thumbnailUrl: "https:" + url }
+        const { title, thumbnail: { fields: { file: { url } } }, description, slug, date } = item.fields;
+        const { id } = item.sys;
+        return { id, title, thumbnailUrl: "https:" + url, slug, date, description }
     })
 }
 
-const fetchBlog = async () => {
-    // Contentful
-    const res = await client.getEntries({
-        content_type: "blog"
-    });
-    return res.items.map((item: any) => {
-        const { title, thumbnail: { fields: { file: { url } } }, description, slug, date, tags } = item.fields;
-        const { id } = item.sys;
-        const blogTags = tags.map((tag: any) => {
-            const { title, thumbnail: { fields: { file: { url } } } } = tag.fields;
-            return { title, thumbnailUrl: "https:" + url }
-        })
-        return { id, title, thumbnailUrl: "https:" + url, slug, date, description, tags: blogTags }
-    })
-}
 
 
 
 
 async function getAllSlugs() {
-    const blog = await fetchBlog();
+    const blog = await fetchFeaturedBlog();
 
     const paths = blog.map((post: any) => {
         const { slug } = post;
@@ -62,7 +49,7 @@ async function getAllSlugs() {
 
 async function getPostBySlug(slug: string) {
     const res = await client.getEntries({
-        content_type: "blog",
+        content_type: "featuredBlog",
         "fields.slug": slug
     });
     if (res.items) {
@@ -99,9 +86,7 @@ function Post({ post }: any) {
     if (!post) {
         return <h1>Unable to find post</h1>
     }
-
-    console.log(process.env);
-    const { title, description, date, slug, tags, thumbnail: { fields: { file: { url } } } } = post;
+    const { title, description, date, thumbnail: { fields: { file: { url } } } } = post;
     return (
         <>
             <Head>

@@ -33,10 +33,11 @@ function PostHighlight({ post, type }: { post: PostType, type: string }) {
 
 
     return (
-        <section className="mt-8 flex flex-col md:w-4/12 w-11/12 p-5 my-3">
-            <Link href={`${initialUrl}/${slug}`}>
+        <section className="mt-8 flex flex-col md:w-4/12 w-11/12 relative p-5 my-3 group">
+            <Link href={`${initialUrl}/${slug}`} className="">
                 <Image src={thumbnailUrl} alt="blog" width="1600" height="900"
-                    className="rounded-xl transition duration-300 hover:-translate-y-1 cursor-pointer w-full h-[280px] object-cover" />
+                    className="rounded-xl transition duration-300 group-hover:-translate-y-1 cursor-pointer w-full h-[280px] object-cover" />
+
             </Link>
             <div className="flex mt-4">
                 {tags && tags.map((tag: any, index: number) => {
@@ -45,7 +46,15 @@ function PostHighlight({ post, type }: { post: PostType, type: string }) {
             </div>
             <Link href={`${initialUrl}/${slug}`}
                 className="text-2xl font-bold cursor-pointer hover:underline ml-2 title overflow-hidden">
-                {title}</Link>
+
+                <div className='flex items-start'>
+                    <h3 className='flex-1 title'>
+                        {title}
+                    </h3>
+                    {type == "featured" && <Image src="/assets/star.png" width="30" height="30" alt="Anythin" className="z-50" />
+                    }
+                </div>
+            </Link>
         </section>
     )
 }

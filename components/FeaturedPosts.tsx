@@ -9,25 +9,24 @@ function Tag({ children }: any) {
 const APP_URL = 'http://localhost:1337';
 
 function Post({ data }: any) {
-    return <section className="mt-8 lg:w-1/4 md:w-8/12 sm:w-11/12 p-5 bg-green-800 m-6 rounded-xl flex flex-col items-center cursor-pointer hover:-translate-y-1 transition duration-300">
-        <Link href={`/featured/post/${removeQuestionMark(data.attributes.Title.toLowerCase().split(" ").join("-"))}`}>
-            <Image src={`${APP_URL + data.attributes.Image.data.attributes.url}`} alt="blog" width="300" height="200"
+    return <section className="relative mt-8 lg:w-1/4 md:w-8/12 sm:w-11/12 p-5 bg-green-800 m-6 rounded-xl flex flex-col items-center cursor-pointer hover:-translate-y-1 transition duration-300">
+        <Link href={`/featured/post/${data.slug}`} className="my-auto">
+            <Image src={`${data.thumbnailUrl}`} alt="blog" width="300" height="200"
                 className="rounded-xl" />
         </Link>
-        {/* <div className="flex mt-4 w-full ml-4">
-            <Tag>Lifestyle</Tag>
-            <Tag>Eco</Tag>
-        </div> */}
-        <Link href={`/featured/post/${removeQuestionMark(data.attributes.Title.toLowerCase().split(" ").join("-"))}`} className="text-2xl font-bold cursor-pointer hover:underline ml-2 title text-white mt-3">{data.attributes.Title}</Link>
+        <Image src="/assets/star.png" width="20" height="20" alt="Anythin" className="z-50 absolute top-1 right-1" />
+
+        <Link href={`/featured/post/${data.slug}`} className="text-2xl font-bold cursor-pointer hover:underline ml-2 title text-white mt-3">{data.title}</Link>
     </section>
 }
 
 
 function FeaturedPosts({ posts }: any) {
-    let myPosts: any = []
-    for (let i = posts.length - 1; i >= 0; i--) {
-        myPosts.push(posts[i]);
-    }
+    // let myPosts: any = []
+    // for (let i = posts.length - 1; i >= 0; i--) {
+    //     myPosts.push(posts[i]);
+    // }
+    console.log("Featured:", posts);
 
     return (
         <div className='bg-green-100 w-full flex flex-col items-center rounded-xl py-14 '>
@@ -35,7 +34,7 @@ function FeaturedPosts({ posts }: any) {
             <h1 className='title my-8 font-bold md:text-4xl text-2xl text-center leading-normal'>Get started with our<br /> best stories</h1>
             <div className='flex justify-center flex-wrap'>
                 {
-                    myPosts.map((post: any, index: number) => {
+                    posts.map((post: any, index: number) => {
                         return <Post key={index} data={post} />
                     })
                 }

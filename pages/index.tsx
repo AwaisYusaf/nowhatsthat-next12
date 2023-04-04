@@ -14,11 +14,6 @@ import Footer from "../components/Footer";
 import { createClient } from "contentful";
 
 
-
-const tags = ["Idea", "Interior", "Lifestyle", "Design", "Health", "Eco", "Review"];
-
-const APP_URL = "http://localhost:1337";
-
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!
@@ -51,40 +46,36 @@ const fetchBlog = async () => {
     return { id, title, thumbnailUrl: "https:" + url, slug, date, description, tags: blogTags }
   })
 }
+const fetchFeaturedBlog = async () => {
+  // Contentful
+  const res = await client.getEntries({
+    content_type: "featuredBlog"
+  });
+  return res.items.map((item: any) => {
+    const { title, thumbnail: { fields: { file: { url } } }, description, slug, date } = item.fields;
+    const { id } = item.sys;
+    return { id, title, thumbnailUrl: "https:" + url, slug, date, description }
+  })
+}
 
 
 
 export async function getStaticProps() {
-  const url = `${APP_URL}/api/posts?populate=*`;
-  const url3 = `${APP_URL}/api/featured-posts?populate=*`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-
-  const res3 = await fetch(url3);
-  const data3 = await res3.json();
-
-  const [tags, blog] = await Promise.all([fetchTags(), fetchBlog()]);
+  const [tags, blog, featured] = await Promise.all([fetchTags(), fetchBlog(), fetchFeaturedBlog()]);
 
   return {
     props: {
       blog,
-      myposts: data.data,
-      featuredPostsData: data3.data,
+      featured,
       tags
     }
   }
 }
 
 
-const Home: NextPage = ({ myposts, featuredPostsData, tags, blog }: any) => {
+const Home: NextPage = ({ tags, blog, featured }: any) => {
 
-  //array[array.length-1] will be latest post.
 
-  let postsData: any = [];
-  for (let i = myposts.length - 1; i >= 0; i--) {
-    postsData.push(myposts[i]);
-  }
 
 
   return (
@@ -139,7 +130,7 @@ const Home: NextPage = ({ myposts, featuredPostsData, tags, blog }: any) => {
           </div>
         </div>
         <div className="w-full"><h3 className="uppercase my-2 mt-16 font-thin text-sm lg:ml-0 ml-4">Featured posts</h3></div>
-        <FeaturedPosts posts={featuredPostsData} />
+        <FeaturedPosts posts={featured} />
         <div className="w-full"><h3 className="uppercase mt-14 font-thin text-sm lg:ml-0 ml-4">All posts</h3></div>
         {/* All posts container */}
         <div className="flex flex-wrap w-full md:flex-row flex-col items-start">
