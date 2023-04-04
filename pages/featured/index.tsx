@@ -7,8 +7,8 @@ import PostHighlight from "../../components/PostHighlight";
 import { createClient } from "contentful";
 
 const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID!,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+  space: "1x6ki17dg0qb",
+  accessToken: "zgGSibJAwdQVT-0Gg3H7Efims0MHsjfFNdewiYyAXrM",
 });
 
 const fetchFeaturedBlog = async () => {
