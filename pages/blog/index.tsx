@@ -52,21 +52,12 @@ const fetchBlog = async () => {
 }
 
 
-export async function getServerSideProps() {
-    const url = `${APP_URL}/api/posts?populate=*`;
-    const res = await fetch(url);
-    const { data } = await res.json();
-
-    const url2 = `${APP_URL}/api/tags?populate=*`;
-    const res2 = await fetch(url2);
-    const data2 = await res2.json();
+export async function getStaticProps() {
 
     const [blog, ctags] = await Promise.all([fetchBlog(), fetchTags()]);
 
     return {
         props: {
-            posts: data,
-            tags: data2.data,
             blog,
             ctags
         }
@@ -76,13 +67,7 @@ export async function getServerSideProps() {
 
 
 
-function Blogs({ posts, tags, blog, ctags }: any) {
-    let postsData = [posts[posts.length - 1]];
-    for (let i = posts.length - 2; i >= 0; i--) {
-        postsData.push(posts[i]);
-    }
-    console.log(blog);
-    console.log(ctags);
+function Blogs({ blog, ctags }: any) {
 
 
     return (

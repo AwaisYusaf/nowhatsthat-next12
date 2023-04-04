@@ -26,9 +26,8 @@ const fetchFeaturedBlog = async () => {
 }
 
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const featuredBlog = await fetchFeaturedBlog();
-
     return {
         props: {
             posts: featuredBlog,
@@ -37,7 +36,6 @@ export async function getServerSideProps() {
 }
 
 function FeaturedPosts({ posts }: any) {
-
     return (
         <main>
             <Head>

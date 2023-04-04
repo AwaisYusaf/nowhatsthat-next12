@@ -63,7 +63,7 @@ export async function getStaticPaths() {
     const paths = await getAllSlugs();
     return {
         paths,
-        fallback: true
+        fallback: false
     }
 }
 

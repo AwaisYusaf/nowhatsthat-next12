@@ -7,8 +7,6 @@ import { useRouter } from "next/router";
 
 import { createClient } from "contentful";
 
-
-const APP_URL = 'http://localhost:1337';
 function Tag({ children }: any) {
     const path = useRouter().query;
     return <Link
@@ -57,41 +55,13 @@ const fetchBlog = async () => {
     })
 }
 
-async function getAllPossibleTags() {
-    const tags = await fetchTags();
-    const paths = tags.map((tag: any) => {
-        return {
-            params: {
-                tag: tag.title
-            }
-        }
-    });
-    return paths;
-}
 
 
-
-
-
-export async function getStaticPaths() {
-    const paths = await getAllPossibleTags();
-    return { paths, fallback: false }
-}
-
-function contains(arr: any, item: any) {
-    for (let i = 0; i < arr; i++) {
-        if (arr.attributes.Name === item) {
-            return true;
-        }
-    }
-    return false;
-}
 
 
 function filterPosts(tag: string, posts: any) {
 
     let targetPosts: any = [];
-    console.log("FiltedPosts Function...Tag:", tag, "...Data:", posts);
 
     for (let i = 0; i < posts.length; i++) {
         // posts.data[i].attributes.tags will return object schema : {data: [ { id: 5, attributes: [Object] }, { id: 6, attributes: [Object] } ]}
@@ -107,28 +77,42 @@ function filterPosts(tag: string, posts: any) {
 
     return targetPosts;
 }
+async function getAllPossibleTags() {
+    const tags = await fetchTags();
+    const paths = tags.map((tag: any) => {
+        return {
+            params: {
+                tag: tag.title
+            }
+        }
+    });
+    return paths;
+}
+
+
+
+export async function getStaticPaths() {
+    const paths = await getAllPossibleTags();
+    return { paths, fallback: false }
+}
+
+
+
 export async function getStaticProps({ params }: { params: { tag: string } }) {
 
     const [blog, tags] = await Promise.all([fetchBlog(), fetchTags()]);
 
-
     const targetPosts = filterPosts(params.tag, blog);
 
-    const url2 = `${APP_URL}/api/tags?populate=*`;
-    const res2 = await fetch(url2);
-    const data2 = await res2.json();
-
     return { props: { posts: targetPosts, tags, tag: params.tag } };
+
 }
 
 function Blogs({ posts, tags, tag }: any) {
     if (!posts) {
         return <p className='text-gray-600 font-semibold'>No Post with {tag} avaiable</p>
     }
-    let postsData: any = [];
-    for (let i = posts.length - 1; i >= 0; i--) {
-        postsData.push(posts[i]);
-    }
+
 
     return (
         <main>
@@ -148,8 +132,8 @@ function Blogs({ posts, tags, tag }: any) {
                 <div className="w-full"><h3
                     className="uppercase font-bold text-md ml-5 border-b-2 border-green-300 w-fit mt-5">{tag}</h3></div>
                 <div className="flex flex-wrap w-full">
-                    {postsData.length > 0 ? (
-                        postsData.map((post: any, index: number) => {
+                    {posts.length > 0 ? (
+                        posts.map((post: any, index: number) => {
                             return <PostHighlight key={index} post={post} type="" />
                         }))
                         : <p className='text-gray-600 font-semibold text-center w-full mt-20'>No {tag} post avaiable</p>}

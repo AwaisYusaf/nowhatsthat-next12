@@ -76,7 +76,7 @@ export async function getStaticPaths() {
     const paths = await getAllSlugs();
     return {
         paths,
-        fallback: true
+        fallback: false
     }
 }
 
@@ -100,7 +100,6 @@ function Post({ post }: any) {
         return <h1>Unable to find post</h1>
     }
 
-    console.log(process.env);
     const { title, description, date, slug, tags, thumbnail: { fields: { file: { url } } } } = post;
     return (
         <>
