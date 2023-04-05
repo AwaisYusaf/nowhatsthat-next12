@@ -99,7 +99,7 @@ export async function getStaticProps() {
 
 function Blogs({ blog, ctags }: any) {
   return (
-    <main>
+    <>
       <Head>
         <title>Blog | Now Whats That</title>
       </Head>
@@ -115,13 +115,13 @@ function Blogs({ blog, ctags }: any) {
             All
           </h3>
         </div>
-        <div className="flex flex-wrap w-full">
+        <div className="flex flex-wrap w-full bg-red-300">
           {blog.map((post: any, index: number) => {
             return <PostHighlight key={index} post={post} type="" />;
           })}
         </div>
       </HomeLayout>
-    </main>
+    </>
   );
 }
 
