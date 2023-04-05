@@ -34,7 +34,7 @@ function PostHighlight({ post, type }: { post: PostType; type: string }) {
   const initialUrl = type == "featured" ? "/featured/post" : "/blog/post";
   //   md:w-4/12 w-11/12 p-5
   return (
-    <section className="flex flex-col relative group lg:px-0 px-3">
+    <section className="flex flex-col relative group lg:px-0 px-3 mt-3">
       <Link href={`${initialUrl}/${slug}`} className="">
         <Image
           src={thumbnailUrl}
