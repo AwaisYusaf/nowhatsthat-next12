@@ -126,7 +126,10 @@ export async function getStaticProps({ params }: { params: { tag: string } }) {
 
   const targetPosts = filterPosts(params.tag, blog);
 
-  return { props: { posts: targetPosts, tags, tag: params.tag } };
+  return {
+    props: { posts: targetPosts, tags, tag: params.tag },
+    revalidate: 10,
+  };
 }
 
 function Blogs({ posts, tags, tag }: any) {

@@ -93,6 +93,7 @@ export async function getStaticProps() {
       blog,
       ctags,
     },
+    revalidate: 10,
   };
 }
 

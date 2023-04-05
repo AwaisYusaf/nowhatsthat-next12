@@ -110,6 +110,7 @@ export async function getStaticProps() {
       featured,
       tags,
     },
+    revalidate: 10,
   };
 }
 
@@ -209,7 +210,7 @@ const Home: NextPage = ({ tags, blog, featured }: any) => {
           </h3>
         </div>
         {/* All posts container */}
-        <div className="flex flex-wrap w-full md:flex-row flex-col items-start">
+        <div className="flex flex-wrap w-full md:flex-row md:items-center flex-col items-start">
           {blog.map((post: any, index: number) => {
             return <PostHighlight post={post} key={index} type="" />;
           })}
