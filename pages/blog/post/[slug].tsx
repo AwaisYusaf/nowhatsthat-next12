@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HomeLayout from "../../../components/HomeLayout";
 import Head from "next/head";
 import Image from "next/image";
@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import styles from "./style.module.css";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { createClient } from "contentful";
+import { useRouter } from "next/router";
 
 import { parseISO, format } from "date-fns";
 
@@ -121,8 +122,18 @@ export async function getStaticProps({ params }: any) {
 }
 
 function Post({ post }: any) {
+  const router = useRouter();
+  useEffect(() => {
+    if (!post) {
+      setTimeout(() => {
+        if (window != undefined) {
+          window.location.href = "/";
+        }
+      }, 1500);
+    }
+  });
   if (!post) {
-    return <h1>Unable to find post</h1>;
+    return <h1 className="w-full text-center">Loading</h1>;
   }
 
   const {

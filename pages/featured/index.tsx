@@ -55,7 +55,7 @@ function FeaturedPosts({ posts }: any) {
             Featured Posts
           </h3>
         </div>
-        <div className="flex flex-wrap w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
           {posts.map((post: any, index: number) => {
             return <PostHighlight key={index} post={post} type={"featured"} />;
           })}

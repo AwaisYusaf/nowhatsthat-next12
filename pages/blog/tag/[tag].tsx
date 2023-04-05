@@ -15,7 +15,7 @@ function Tag({ children }: any) {
         path.tag == children
           ? "text-white bg-black"
           : "bg-green-100 hover:bg-green-200"
-      }  text-lg mx-2 px-4 py-1 rounded-full font-medium cursor-pointer`}
+      }  text-lg mx-2 px-4 py-1 rounded-full font-medium cursor-pointer text-xs lg:text-lg my-2`}
       href={children == "All" ? "/blog" : `/blog/tag/${children}`}
     >
       {children}
@@ -145,7 +145,7 @@ function Blogs({ posts, tags, tag }: any) {
         <title>Blog | Now Whats That</title>
       </Head>
       <HomeLayout>
-        <div className="flex mt-4 w-full">
+        <div className="flex mt-4 w-full flex-wrap md:justify-start justify-evenly">
           <Tag>All</Tag>
           {tags.map((tag: any, index: number) => {
             return <Tag key={index}>{tag.title}</Tag>;
@@ -156,7 +156,7 @@ function Blogs({ posts, tags, tag }: any) {
             {tag}
           </h3>
         </div>
-        <div className="flex flex-wrap w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {posts.length > 0 ? (
             posts.map((post: any, index: number) => {
               return <PostHighlight key={index} post={post} type="" />;
