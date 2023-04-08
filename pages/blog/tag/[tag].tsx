@@ -118,7 +118,7 @@ async function getAllPossibleTags() {
 
 export async function getStaticPaths() {
   const paths = await getAllPossibleTags();
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 }
 
 export async function getStaticProps({ params }: { params: { tag: string } }) {
