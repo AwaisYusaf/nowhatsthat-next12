@@ -5,10 +5,14 @@
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     align-items: center;
     width: 100%;
+    word-wrap: break-word;
+
 }
 .container ul{
     list-style:inside;
     margin: 10px 0;
+    width: 100%;
+
 }
 .container ol{
     list-style:inside decimal;
@@ -19,30 +23,43 @@
     font-weight: bold;
     margin: 15px 0;
     color:gray;
+    width: 100%;
+
 }
 .container h2{
     font-size: 25px;
     font-weight: 600;
     margin: 5px 0;
-    
+    width: 100%;
+
 }
 .container h3{
     font-size: 22px;
     font-weight: 600;
     margin: 8px 0;
+    width: 100%;
+
     
 }
 .container p{
     margin:20px 0;
     font-family: Georgia, 'Times New Roman', Times, serif;
+    width: 100%;
+
 }
 .container p, .container li{
     font-size: 22px;
+    width: 100%;
+
 }
 .container a{
     text-decoration: underline;
     color:green;
+    width: 100%;
+
 }
 .container em{
     color:gray;
+    width: 100%;
+
 }

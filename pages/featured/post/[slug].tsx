@@ -118,7 +118,7 @@ function Post({ post }: any) {
           />
           <h1 style={{ color: "black", textAlign: "center" }}>{title}</h1>
 
-          <div className="lg:w-8/12 w-11/12 mt-10">
+          <div className="lg:w-8/12 w-11/12 mt-10 overflow-hidden">
             {documentToReactComponents(description)}
           </div>
         </article>

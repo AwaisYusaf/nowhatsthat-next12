@@ -7,10 +7,11 @@ function Header() {
     <header className="flex w-full items-center px-12">
       <Link href="/">
         <Image
-          src="/assets/images/logo.png"
+          src="/assets/images/logo.jpg"
           alt="logo"
-          width="180"
-          height="10"
+          width="120"
+          height="120"
+          className="p-4"
         />
       </Link>
       <div className="md:flex flex-1 font-semibold transition text-md text-gray-600 hidden">

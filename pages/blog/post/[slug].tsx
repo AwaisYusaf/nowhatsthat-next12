@@ -168,7 +168,9 @@ function Post({ post }: any) {
             src={"https:" + url}
             className="rounded-lg lg:w-8/12 w-11/12"
           />
-          <h1 style={{ color: "black", textAlign: "center" }}>{title}</h1>
+          <h1 style={{ color: "black", textAlign: "center", width: "70%" }}>
+            {title}
+          </h1>
 
           <div className="lg:w-8/12 w-11/12 mt-10">
             {documentToReactComponents(description)}
