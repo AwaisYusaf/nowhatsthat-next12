@@ -43,8 +43,6 @@ function Post({ data }: any) {
 }
 
 function FeaturedPosts({ posts }: any) {
-  const fPosts = [posts[0], posts[1], posts[2]];
-
   return (
     <div className="bg-green-100 w-full flex flex-col items-center rounded-xl py-14 ">
       <p className="text-lg text-gray-700 font-semibold">Editor’s Choice</p>
@@ -53,7 +51,7 @@ function FeaturedPosts({ posts }: any) {
         <br /> best stories
       </h1>
       <div className="flex justify-center flex-wrap">
-        {fPosts.map((post: any, index: number) => {
+        {posts.slice(0, 3).map((post: any, index: number) => {
           return <Post key={index} data={post} />;
         })}
       </div>

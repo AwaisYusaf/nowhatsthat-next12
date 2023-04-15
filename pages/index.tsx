@@ -212,7 +212,7 @@ const Home: NextPage = ({ tags, blog, featured }: any) => {
         {/* All posts container */}
         {/* flex flex-wrap w-full md:flex-row md:items-center flex-col items-start */}
         <div className="grid grid-cols-1 gap-x-3 grid-y-3 lg:gap-y-6 md:grid-cols-2 lg:grid-cols-3">
-          {blog.map((post: any, index: number) => {
+          {blog.slice(0, 6).map((post: any, index: number) => {
             return <PostHighlight post={post} key={index} type="" />;
           })}
         </div>
